@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { Rocket, Cpu, Video, ListTodo, Activity, AlertCircle } from 'lucide-react'
+import { Rocket, Cpu, Video, ListTodo, Activity, AlertCircle, Sun, Moon } from 'lucide-react'
 
 const NOCODB_URL = process.env.NEXT_PUBLIC_NOCODB_URL || 'https://nocodb-lina.apogeuautomacao.cloud'
 const NOCODB_TOKEN = process.env.NEXT_PUBLIC_NOCODB_TOKEN || ''
@@ -30,10 +30,34 @@ export default function Dashboard() {
   const [health, setHealth] = useState<HealthCheck[]>([])
   const [selectedWidget, setSelectedWidget] = useState('all')
   const [error, setError] = useState<string | null>(null)
+  const [isDark, setIsDark] = useState(false)
 
   useEffect(() => {
+    // Carregar tema do localStorage
+    const savedTheme = localStorage.getItem('theme')
+    if (savedTheme === 'dark') {
+      setIsDark(true)
+      document.documentElement.classList.add('dark')
+    } else if (savedTheme === 'light') {
+      setIsDark(false)
+      document.documentElement.classList.remove('dark')
+    }
+
     fetchData()
   }, [])
+
+  const toggleTheme = () => {
+    const newTheme = isDark ? 'light' : 'dark'
+    setIsDark(!isDark)
+
+    if (newTheme === 'dark') {
+      document.documentElement.classList.add('dark')
+    } else {
+      document.documentElement.classList.remove('dark')
+    }
+
+    localStorage.setItem('theme', newTheme)
+  }
 
   const fetchData = async () => {
     try {
@@ -61,7 +85,9 @@ export default function Dashboard() {
     }
   }
 
-  const getTaskTags = (task: Task) => (task.tags || '').toLowerCase()
+  const getTaskTags = (task: Task): string => {
+    return task.tags?.toLowerCase() || ''
+  }
 
   const filteredTasks = selectedWidget === 'all'
     ? tasks
@@ -76,6 +102,10 @@ export default function Dashboard() {
   const pendingTasks = filteredTasks.filter(t => t.status === 'pending')
   const doneTasks = filteredTasks.filter(t => t.status === 'done')
   const highPriorityTasks = pendingTasks.filter(t => t.priority === 'high')
+
+  const latestHealth = health.sort((a, b) =>
+    new Date(b.last_check).getTime() - new Date(a.last_check).getTime()
+  )[0]
 
   const getStatusColor = (status: string) => {
     switch (status?.toLowerCase()) {
@@ -100,9 +130,20 @@ export default function Dashboard() {
     <div className="min-h-screen bg-background p-6">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-foreground mb-2">🪷 Lina Dashboard</h1>
-          <p className="text-muted-foreground">Mission Control - Gestão de Projetos e Automações</p>
+        <div className="mb-8 flex items-center justify-between">
+          <div>
+            <h1 className="text-3xl font-bold text-foreground mb-2">🪷 Lina Dashboard</h1>
+            <p className="text-muted-foreground">Mission Control - Gestão de Projetos e Automações</p>
+          </div>
+
+          {/* Theme Toggle */}
+          <button
+            onClick={toggleTheme}
+            className="p-3 rounded-lg bg-card border border-border hover:bg-muted/50 transition-colors"
+            aria-label={isDark ? 'Ativar tema claro' : 'Ativar tema escuro'}
+          >
+            {isDark ? <Sun className="h-6 w-6 text-foreground" /> : <Moon className="h-6 w-6 text-foreground" />}
+          </button>
         </div>
 
         {/* Error Alert */}
