@@ -12,8 +12,8 @@ interface Task {
   status: string
   priority: string
   due_date: string
-  assigned_to: string
-  tags: string
+  assigned_to?: string
+  tags?: string | null
 }
 
 interface HealthCheck {
@@ -61,10 +61,12 @@ export default function Dashboard() {
     }
   }
 
+  const getTaskTags = (task: Task) => (task.tags || '').toLowerCase()
+
   const filteredTasks = selectedWidget === 'all'
     ? tasks
     : tasks.filter(t => {
-        const tags = t.tags?.toLowerCase() || ''
+        const tags = getTaskTags(t)
         if (selectedWidget === 'founder') return tags.includes('founder')
         if (selectedWidget === 'dev') return tags.includes('dev')
         if (selectedWidget === 'creator') return tags.includes('content')
@@ -74,10 +76,6 @@ export default function Dashboard() {
   const pendingTasks = filteredTasks.filter(t => t.status === 'pending')
   const doneTasks = filteredTasks.filter(t => t.status === 'done')
   const highPriorityTasks = pendingTasks.filter(t => t.priority === 'high')
-
-  const latestHealth = health.sort((a, b) =>
-    new Date(b.last_check).getTime() - new Date(a.last_check).getTime()
-  )[0]
 
   const getStatusColor = (status: string) => {
     switch (status?.toLowerCase()) {
@@ -285,13 +283,13 @@ export default function Dashboard() {
               <div className="grid grid-cols-2 gap-3">
                 <div className="p-3 bg-muted/30 rounded-lg text-center">
                   <p className="text-2xl font-bold text-foreground">
-                    {tasks.filter(t => t.tags.toLowerCase().includes('content') && t.status === 'pending').length}
+                    {tasks.filter(t => getTaskTags(t).includes('content') && t.status === 'pending').length}
                   </p>
                   <p className="text-xs text-muted-foreground">Pendentes</p>
                 </div>
                 <div className="p-3 bg-muted/30 rounded-lg text-center">
                   <p className="text-2xl font-bold text-foreground">
-                    {tasks.filter(t => t.tags.toLowerCase().includes('content') && t.status === 'done').length}
+                    {tasks.filter(t => getTaskTags(t).includes('content') && t.status === 'done').length}
                   </p>
                   <p className="text-xs text-muted-foreground">Concluídas</p>
                 </div>

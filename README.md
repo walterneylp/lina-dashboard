@@ -32,7 +32,7 @@ Dashboard profissional de Mission Control para gestão de projetos e automaçõe
 
 ```env
 NEXT_PUBLIC_NOCODB_URL=https://nocodb-lina.apogeuautomacao.cloud
-NEXT_PUBLIC_NOCODB_TOKEN=x6CKGkcsXLoDXjEdE0C5SoMvT4OMk6pR9a0kFHMZ
+NEXT_PUBLIC_NOCODB_TOKEN=SEU_TOKEN_AQUI
 ```
 
 ### Passo 4: Deploy
@@ -56,7 +56,7 @@ Clique em **"Deploy"** e aguarde!
 npm install
 
 # Criar .env.local
-cp .env.production .env.local
+cp .env.example .env.local
 
 # Build
 npm run build
@@ -78,11 +78,11 @@ npm run dev
 
 ## 🔧 Variáveis de Ambiente
 
-### .env.production
+### .env.example
 
 ```env
 NEXT_PUBLIC_NOCODB_URL=https://nocodb-lina.apogeuautomacao.cloud
-NEXT_PUBLIC_NOCODB_TOKEN=x6CKGkcsXLoDXjEdE0C5SoMvT4OMk6pR9a0kFHMZ
+NEXT_PUBLIC_NOCODB_TOKEN=SEU_TOKEN_AQUI
 ```
 
 ---
@@ -91,7 +91,7 @@ NEXT_PUBLIC_NOCODB_TOKEN=x6CKGkcsXLoDXjEdE0C5SoMvT4OMk6pR9a0kFHMZ
 
 **Build falha:**
 - Verifique se Node.js é 18.x ou 20.x
-- Certifique-se de que copiou `.env.production` para `.env.local`
+- Certifique-se de que copiou `.env.example` para `.env.local`
 
 **Erro de CORS ao acessar NocoDB:**
 - Verifique se o token está correto

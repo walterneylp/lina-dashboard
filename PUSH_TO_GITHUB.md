@@ -38,7 +38,7 @@ git push -u origin main
 
 ```env
 NEXT_PUBLIC_NOCODB_URL=https://nocodb-lina.apogeuautomacao.cloud
-NEXT_PUBLIC_NOCODB_TOKEN=x6CKGkcsXLoDXjEdE0C5SoMvT4OMk6pR9a0kFHMZ
+NEXT_PUBLIC_NOCODB_TOKEN=SEU_TOKEN_AQUI
 ```
 
 ## Passo 4: Deploy
