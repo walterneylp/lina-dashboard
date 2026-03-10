@@ -103,10 +103,6 @@ export default function Dashboard() {
   const doneTasks = filteredTasks.filter(t => t.status === 'done')
   const highPriorityTasks = pendingTasks.filter(t => t.priority === 'high')
 
-  const latestHealth = health.sort((a, b) =>
-    new Date(b.last_check).getTime() - new Date(a.last_check).getTime()
-  )[0]
-
   const getStatusColor = (status: string) => {
     switch (status?.toLowerCase()) {
       case 'healthy': return 'text-green-500'
